@@ -45,7 +45,7 @@ def convert_orion_space_to_skopt_space(orion_space):
     return Space(dimensions)
 
 
-class BayesianOptimizer(BaseAlgorithm):
+class TPE(BaseAlgorithm):
     """Wrapper skopt's bayesian optimizer"""
 
     requires = 'real'
@@ -100,7 +100,7 @@ class BayesianOptimizer(BaseAlgorithm):
         .. seemore::
            About optional arguments passed to `skopt.learning.GaussianProcessRegressor`.
         """
-        super(BayesianOptimizer, self).__init__(space,
+        super(TPE, self).__init__(space,
                                                 strategy=strategy,
                                                 n_initial_points=n_initial_points,
                                                 acq_func=acq_func,
@@ -113,24 +113,11 @@ class BayesianOptimizer(BaseAlgorithm):
         """Suggest a `num`ber of new sets of parameters.
         Perform a step towards negative gradient and suggest that point.
         """
-        self._init_optimizer()
-        points = self.optimizer.ask(n_points=num, strategy=self.strategy)
-        return [pack_point(point, self.space) for point in points]
+        return self.space.sample(num)
 
     def observe(self, points, results):
         """Observe evaluation `results` corresponding to list of `points` in
         space.
         Save current point and gradient corresponding to this point.
         """
-        self._init_optimizer()
-        self.optimizer.tell([unpack_point(point, self.space) for point in points],
-                            [r['objective'] for r in results])
-
-    def _init_optimizer(self):
-        if self.optimizer is None:
-            self.optimizer = Optimizer(
-                base_estimator=GaussianProcessRegressor(alpha=self.alpha,
-                                                        n_restarts_optimizer=self.n_restarts_optimizer,
-                                                        normalize_y=self.normalize_y),
-                dimensions=convert_orion_space_to_skopt_space(self.space),
-                n_initial_points=self.n_initial_points, acq_func=self.acq_func)
+        pass

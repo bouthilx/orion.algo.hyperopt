@@ -1,5 +1,4 @@
-algorithms:
-  TPE: null
+algorithms: TPE
     # NOTE: Add arguments here if necessary
 
 database:

@@ -34,11 +34,12 @@ def main():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
     for algo_name, algo_config_file in get_algorithm_configs():
-        # if algo_name != "tpe":
-        #     continue
+        if algo_name != "tpe":
+            continue
         print(" ==== ")
         print(" Executing {}".format(algo_name))
         print(" ==== ")
+
         # experiment name based on file name
         orion.core.cli.main(
             ["hunt", "--config", algo_config_file, '-n', algo_name,
@@ -46,8 +47,9 @@ def main():
              "./rosenbrock.py", "-x~uniform(-10, 10, shape=2)", "-y~uniform(-10, 10)"])
 
     for algo_name, _ in get_algorithm_configs():
-        if algo_name != "tpe":
-            continue
+        # if algo_name != "tpe":
+        #     continue
+
 
         experiment = ExperimentBuilder().build_view_from(
             {"name": algo_name, "database": database_config})

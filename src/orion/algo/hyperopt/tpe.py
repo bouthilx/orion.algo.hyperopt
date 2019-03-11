@@ -57,6 +57,8 @@ class TPE(BaseAlgorithm):
         """
         TODO: init docstring
         """
+
+        print("HERE")
         max_concurrent=1
         points_to_evaluate=None
         reward_attr="objective",

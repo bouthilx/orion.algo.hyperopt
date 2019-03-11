@@ -162,9 +162,8 @@ class TPE(BaseAlgorithm):
                           result=None,
                           error=False,
                           early_terminated=False):
-        """Passes the result to HyperOpt unless early terminated or errored.
-        The result is internally negated when interacting with HyperOpt
-        so that HyperOpt can "maximize" this value, as it minimizes on default.
+        """
+            Passes the result to HyperOpt unless early terminated or errored.
         """
         ho_trial = self._get_hyperopt_trial(trial_id)
         if ho_trial is None:
@@ -184,7 +183,7 @@ class TPE(BaseAlgorithm):
         del self._live_trial_mapping[trial_id]
 
     def _to_hyperopt_result(self, result):
-        return {"loss": -result[self._reward_attr], "status": "ok"}
+        return {"loss": result[self._reward_attr], "status": "ok"}
 
     def _get_hyperopt_trial(self, trial_id):
         if trial_id not in self._live_trial_mapping:

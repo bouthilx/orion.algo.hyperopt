@@ -34,8 +34,8 @@ def main():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
     for algo_name, algo_config_file in get_algorithm_configs():
-        if algo_name != "tpe":
-            continue
+        # if algo_name != "tpe":
+        #     continue
         print(" ==== ")
         print(" Executing {}".format(algo_name))
         print(" ==== ")
@@ -45,18 +45,18 @@ def main():
                 "--max-trials", "40", "--pool-size", "1",
              "./rosenbrock.py", "-x~uniform(-10, 10, shape=2)", "-y~uniform(-10, 10)"])
 
-    # for algo_name, _ in get_algorithm_configs():
-    #     if algo_name != "tpe":
-    #         continue
+    for algo_name, _ in get_algorithm_configs():
+        if algo_name != "tpe":
+            continue
 
-    #     experiment = ExperimentBuilder().build_view_from(
-    #         {"name": algo_name, "database": database_config})
+        experiment = ExperimentBuilder().build_view_from(
+            {"name": algo_name, "database": database_config})
 
-    #     objectives = []
-    #     for trial in sorted(experiment.fetch_trials({'status': 'completed'}), key=order):
-    #         objectives.append(min([trial.objective.value] + objectives))
+        objectives = []
+        for trial in sorted(experiment.fetch_trials({'status': 'completed'}), key=order):
+            objectives.append(min([trial.objective.value] + objectives))
 
-    #     plt.plot(range(len(objectives)), objectives, label=algo_name)
+        plt.plot(range(len(objectives)), objectives, label=algo_name)
 
     plt.legend()
     plt.show()
